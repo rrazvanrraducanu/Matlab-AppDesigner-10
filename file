@@ -1,0 +1,87 @@
+classdef app10 < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure  matlab.ui.Figure
+        UIAxes    matlab.ui.control.UIAxes
+    end
+
+    methods (Access = private)
+
+        % Code that executes after component creation
+        function startupFcn(app)
+          cla (app.UIAxes,'reset')
+            hold (app.UIAxes)
+            P1 = [0,0,0];
+            P2 = [1,1,0];
+            P3 = [1,1,2];
+            P4 = [1,1,1];
+            P5 = [0.5,0.5,0.5];
+            d0 = [P1;P2];
+            d1 = [P1;P3];
+            d2 = [P2;P3];
+            d3 = [P4;P5];
+            
+            plot3(app.UIAxes,d0(:,1),d0(:,2),d0(:,3),'Color','b')
+            plot3(app.UIAxes,d1(:,1),d1(:,2),d1(:,3),'Color','b')
+            plot3(app.UIAxes,d2(:,1),d2(:,2),d2(:,3),'Color','b')
+            plot3(app.UIAxes,d3(:,1),d3(:,2),d3(:,3),'Color','r')
+            
+            xlabel(app.UIAxes,'length');
+            ylabel(app.UIAxes,'width');
+            zlabel(app.UIAxes,'height');
+            
+            view(app.UIAxes,[-3 2 3]) 
+        end
+    end
+
+    % App initialization and construction
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure
+            app.UIFigure = uifigure;
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'UI Figure';
+
+            % Create UIAxes
+            app.UIAxes = uiaxes(app.UIFigure);
+            title(app.UIAxes, 'Title')
+            xlabel(app.UIAxes, 'X')
+            ylabel(app.UIAxes, 'Y')
+            app.UIAxes.Box = 'on';
+            app.UIAxes.XGrid = 'on';
+            app.UIAxes.YGrid = 'on';
+            app.UIAxes.Position = [19 117 571 345];
+        end
+    end
+
+    methods (Access = public)
+
+        % Construct app
+        function app = app10
+
+            % Create and configure components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            % Execute the startup function
+            runStartupFcn(app, @startupFcn)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
